@@ -6,7 +6,9 @@ class XorNN():
         self.inodes = 2
         self.hnodes = 2
         self.onodes = 1
-        self.lr = 0.1
+        self.lr_max = 0.1
+        self.lr_min = 0.001
+        self.lr_decay = 0.995
         self.wih = np.random.randn(self.hnodes, self.inodes) * np.sqrt(2 / self.inodes)  # He initialization
         self.woh = np.random.randn(self.onodes, self.hnodes) * np.sqrt(2 / self.hnodes)  # He initialization
         self.activation_fn = lambda x: 1 / (1 + np.exp(-x))
@@ -27,18 +29,19 @@ class XorNN():
         self.e_hidden = np.dot(self.woh.T, self.e_out) * self.output_hidden * (1 - self.output_hidden)
         self.delta_wih = (np.dot(self.e_hidden, self.inputs.T) / self.t_ex).reshape(self.wih.shape)
 
-    def update(self):
-        self.woh = self.woh + self.lr * self.delta_woh
-        self.wih = self.wih + self.lr * self.delta_wih
+    def update(self, lr):
+        self.woh = self.woh + lr * self.delta_woh
+        self.wih = self.wih + lr * self.delta_wih
 
     def train(self):
-        num_epochs = 10000
+        num_epochs = 30000
         for epoch in range(num_epochs):
             self.forward_prop()
             loss = -(1 / self.t_ex) * np.sum(self.outputs * np.log(self.output_out) + (1 - self.outputs) * np.log(1 - self.output_out))
             self.loss.append(loss)
             self.backward_prop()
-            self.update()
+            lr = self.lr_min + (self.lr_max - self.lr_min) * np.exp(-self.lr_decay * epoch)
+            self.update(lr)
 
     def plot_loss(self):
         plt.plot(self.loss)
@@ -57,5 +60,5 @@ class XorNN():
 xor = XorNN()
 xor.train()
 xor.plot_loss()
-input = [1, 1]
+input = [0, 1]
 xor.test(input)
