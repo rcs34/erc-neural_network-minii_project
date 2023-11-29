@@ -42,8 +42,9 @@ test_file.close()
 
 class NN():
     def __init__(self):
+        
         self.nn_size = [784, 128, 64, 10]
-        self.num_epochs = 10
+        self.num_epochs = 20
         self.lr = 0.001
 
         input_l = self.nn_size[0]
@@ -58,6 +59,7 @@ class NN():
         }
 
     def forward_prop(self, x_train):
+        
         weights = self.weights
         weights['a0'] = x_train
 
@@ -73,6 +75,7 @@ class NN():
         return weights['a3']
 
     def backward_prop(self, y_train, output):
+        
         weights = self.weights
         delta_w = {}
 
@@ -106,11 +109,10 @@ class NN():
             self.weights[key] -= self.lr * value
 
     def train(self, train_list, test_list, output_nodes):
+        
         start_t = time.time()
         for iteration in range(self.num_epochs):
-
             np.random.shuffle(train_list)
-
             for x in train_list:
                 all_values = x.split(',')
                 # scale and shift the inputs
@@ -129,16 +131,16 @@ class NN():
             ))
 
     def accuracy(self, test_list, output_nodes):
+        
         tests = []
-
         for x in test_list:
             all_values = x.split(',')
             inputs = (np.asfarray(all_values[1:]) / 255.0 * 0.99) + 0.01
             targets = np.zeros(output_nodes) + 0.01
             targets[int(all_values[0])] = 0.99
             output = self.forward_prop(inputs)
-            pred = np.argmax(output)
-            tests.append(pred == np.argmax(targets))
+            prediction = np.argmax(output)
+            tests.append(prediction == np.argmax(targets))
 
         return np.mean(tests)
 
