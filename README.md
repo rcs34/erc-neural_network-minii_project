@@ -1,1 +1,1 @@
-# erc-neural_network-minii_project
+# MNIST Neural Network
