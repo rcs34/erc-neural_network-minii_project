@@ -144,6 +144,13 @@ class NN():
 
         return np.mean(tests)
 
+    def plot_loss(self, losses):
+        plt.plot(range(1, len(losses) + 1), losses)
+        plt.xlabel('Epochs')
+        plt.ylabel('Loss')
+        plt.title('Loss Function During Training')
+        plt.show()
+
 
 mnist = NN()
 mnist.train(train_list, test_list, 10)
