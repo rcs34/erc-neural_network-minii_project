@@ -115,15 +115,17 @@ class NN():
             np.random.shuffle(train_list)
             for x in train_list:
                 all_values = x.split(',')
-                # scale and shift the inputs
                 inputs = (np.asfarray(all_values[1:]) / 255.0 * 0.99) + 0.01
-                # create the target output values (all 0.01, except the desired label which is 0.99)
                 targets = np.zeros(output_nodes) + 0.01
-                # all_values[0] is the target label for this record
                 targets[int(all_values[0])] = 0.99
                 output = self.forward_prop(inputs)
                 delta_w = self.backward_prop(targets, output)
                 self.update(delta_w)
+                loss = np.mean((output - targets) ** 2) 
+                epoch_loss += loss
+
+            epoch_loss /= len(train_list)
+            losses.append(epoch_loss)
 
             accuracy = self.accuracy(test_list, output_nodes)
             print('Epoch: {0}, Time Spent: {1:.2f}s, Accuracy: {2:.2f}%'.format(
