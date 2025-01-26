@@ -129,6 +129,7 @@ class NN():
             print('Epoch: {0}, Time Spent: {1:.2f}s, Accuracy: {2:.2f}%'.format(
                 iteration + 1, time.time() - start_t, accuracy * 100
             ))
+        self.plot_loss(losses)
 
     def accuracy(self, test_list, output_nodes):
         
