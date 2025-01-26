@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import time
 
 def convert_csv(images, labels, outfile, n):
     image_file = open(images, "rb")
@@ -128,9 +127,8 @@ class NN():
             losses.append(epoch_loss)
 
             accuracy = self.accuracy(test_list, output_nodes)
-            print('Epoch: {0}, Time Spent: {1:.2f}s, Accuracy: {2:.2f}%'.format(
-                iteration + 1, time.time() - start_t, accuracy * 100
-            ))
+            print('Epoch: {0}, Accuracy: {2:.2f}%'.format(
+                iteration + 1, accuracy * 100))
         self.plot_loss(losses)
 
     def accuracy(self, test_list, output_nodes):
